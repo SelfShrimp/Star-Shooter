@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "939408892307",
+    "project_id": "star-shooter-fcb69",
+    "storage_bucket": "star-shooter-fcb69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939408892307:android:8589834c45c03302f7c866",
+        "android_client_info": {
+          "package_name": "com.selfshrimp.starshooter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939408892307-uf69kkt5vgvted2tkprlt5q72vfibabi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCGQnLIHfmuyE2M6KAEa6W2u8t1BC4je8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939408892307-uf69kkt5vgvted2tkprlt5q72vfibabi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
