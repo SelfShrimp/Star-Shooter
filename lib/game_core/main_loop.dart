@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-bool _mainRunning = true;
+bool _running = true;
 
 void mainLoop(SendPort sendPort) async {
   const double _fps = 50;
@@ -11,7 +11,7 @@ void mainLoop(SendPort sendPort) async {
   Stopwatch _loopWatch = Stopwatch();
   _loopWatch.start();
 
-  while (_mainRunning) {
+  while (_running) {
     if (_loopWatch.elapsedMilliseconds >= _updateTime) {
       _loopWatch.reset();
       sendPort.send(true); //отправляем другим изолятам тру
@@ -19,6 +19,36 @@ void mainLoop(SendPort sendPort) async {
   }
 }
 
-void stopMainLoop() {
-  _mainRunning = false;
+void shotLoop(SendPort sendPort) async {
+  const double _updateTime = 500; //0.5секунд
+
+  //таймер-счетчик
+  Stopwatch _loopWatch = Stopwatch();
+  _loopWatch.start();
+
+  while (_running) {
+    if (_loopWatch.elapsedMilliseconds >= _updateTime) {
+      _loopWatch.reset();
+      sendPort.send(true);
+    }
+  }
+}
+
+void meteorLoop(SendPort sendPort) async {
+  const double _updateTime = 1000;
+
+  //таймер-счетчик
+  Stopwatch _loopWatch = Stopwatch();
+  _loopWatch.start();
+
+  while (_running) {
+    if (_loopWatch.elapsedMilliseconds >= _updateTime) {
+      _loopWatch.reset();
+      sendPort.send(true);
+    }
+  }
+}
+
+void stopLoop() {
+  _running = false;
 }

@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:starshooter/game_core/shot_loop.dart';
+import 'package:starshooter/game_core/main_loop.dart';
 import 'package:starshooter/sprite/app_sprite.dart';
 
 import 'bullet_sprite.dart';
