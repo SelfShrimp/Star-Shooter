@@ -21,7 +21,12 @@ class Player extends Sprite {
       child: Container(
         height: 10.w,
         width: 10.w,
-        color: Colors.red,
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(width: 1, color: Colors.lightBlueAccent),
+        ),
+        child: const Image(image: AssetImage("assets/spaceship.png"),),
       ),
     );
   }
