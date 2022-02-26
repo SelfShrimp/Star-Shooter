@@ -16,6 +16,7 @@ class Meteor extends Sprite{
     var random = Random();
     x = random.nextDouble() * 100.w;
     _size = 5.w + random.nextDouble() * 10.w;
+    x1 = x + _size; y1 = y + _size;
     _speed = 1 + random.nextInt(3);
     _changeAngle = random.nextDouble() * 0.1;
   }
@@ -23,7 +24,7 @@ class Meteor extends Sprite{
   @override
   Widget build() {
     return Positioned(
-      left: x-5.w, //смещение к центру от половины ширины корабля
+      left: x,
       top: y,
       child: Transform.rotate(
         angle: _angle,
@@ -42,6 +43,8 @@ class Meteor extends Sprite{
     _angle += _changeAngle;
     y += _speed;
     if(y > maxHeight) isVisible = false;
+
+    x1 = x + _size; y1 = y + _size;
   }
 
 }
