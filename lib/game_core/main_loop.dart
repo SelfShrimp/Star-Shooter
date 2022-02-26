@@ -35,7 +35,7 @@ void shotLoop(SendPort sendPort) async {
 }
 
 void meteorLoop(SendPort sendPort) async {
-  const double _updateTime = 1000;
+  const double _updateTime = 1500;
 
   //таймер-счетчик
   Stopwatch _loopWatch = Stopwatch();

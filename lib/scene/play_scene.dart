@@ -1,14 +1,31 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:starshooter/game_core/main_loop.dart';
 import 'package:starshooter/scene/app_scene.dart';
+import 'package:starshooter/sprite/meteor_sprite.dart';
 import 'package:starshooter/sprite/player_sprite.dart';
 
 class PlayScene extends AppScene {
   final Ship _player = Ship();
   final List<Widget> _sprites = [];
+  final List<Meteor> meteors = [];
+
+  PlayScene(){
+    final ReceivePort _receivePort = ReceivePort();
+    () async {
+      await Isolate.spawn(meteorLoop, _receivePort.sendPort);
+      _receivePort.listen((message) {
+        //5w чтобы выстрелы летели перед кораблем, а не из его центра
+        meteors.add(Meteor());
+      });
+    }();
+  }
 
   @override
   Widget buildScene() {
+
     return Stack(
       children: [
         _player.build(),
@@ -78,7 +95,12 @@ class PlayScene extends AppScene {
     _player.bullets.removeWhere((element) => !element.isVisible); //удаляем пули
     for (var element in _player.bullets) {
       element.update(); //двигаем
-      _sprites.add(element.build()); //добавляем пули с их новой позицией
+      _sprites.add(element.build()); //добавляем виджеты с их новой позицией
+    }
+    meteors.removeWhere((element) => !element.isVisible);
+    for (var element in meteors) {
+      element.update();
+      _sprites.add(element.build());
     }
   }
 }

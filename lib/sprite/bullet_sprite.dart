@@ -31,7 +31,7 @@ class Bullet extends Sprite{
   @override
   void move() {
     y-=5;
-    if(y < 0.h-5.w) isVisible = false;
+    if(y < minHeight-5.w) isVisible = false;
   }
 
 }
