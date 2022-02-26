@@ -1,22 +1,36 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:starshooter/game_core/shot_loop.dart';
 import 'package:starshooter/sprite/app_sprite.dart';
 
-class Player extends Sprite {
-  Player(){
-    x = 50.w;
-    y = 80.h;
-  }
+import 'bullet_sprite.dart';
 
+class Ship extends Sprite {
+  final ReceivePort _receivePort = ReceivePort();
   bool isMoveLeft = false;
   bool isMoveRight = false;
   bool isNotPan = true;
   double _speedX = 0;
+  final List<Bullet> bullets = [];
+
+  Ship(){
+    x = 50.w;
+    y = 80.h;
+    () async {
+      await Isolate.spawn(shotLoop, _receivePort.sendPort);
+      _receivePort.listen((message) {
+        //5w чтобы выстрелы летели перед кораблем, а не из его центра
+        bullets.add(Bullet(x, y-5.w));
+      });
+    }();
+  }
 
   @override
   Widget build() {
     return Positioned(
-      left: x,
+      left: x-5.w, //смещение к центру от половины ширины корабля
       top: y,
       child: Container(
         height: 10.w,
@@ -38,11 +52,11 @@ class Player extends Sprite {
     if (isMoveRight) _speedX = 3;
 
     x += _speedX;
-    if (x < minWidth) {
-      x = minWidth;
-    } else if (x>maxWidth-10.w){
-      x = maxWidth-10.w;
+    //5w дурацкие смещения для выравнивания
+    if (x < minWidth+5.w) {
+      x = minWidth+5.w;
+    } else if (x>maxWidth-5.w){
+      x = maxWidth-5.w;
     }
   }
-
 }

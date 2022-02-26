@@ -11,7 +11,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game>{
-  final ReceivePort _receivePort = ReceivePort();
+  final ReceivePort _receivePort = ReceivePort(); //порт связи изолятов
   final PlayScene _playScene = PlayScene();
 
   @override

@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:starshooter/scene/app_scene.dart';
 import 'package:starshooter/sprite/player_sprite.dart';
 
 class PlayScene extends AppScene {
-  final Player _player = Player();
+  final Ship _player = Ship();
+  final List<Widget> _sprites = [];
+
   @override
   Widget buildScene() {
     return Stack(
@@ -64,6 +64,9 @@ class PlayScene extends AppScene {
                 )),
           ),
         ),
+        Stack(
+          children: _sprites,
+        )
       ],
     );
   }
@@ -71,5 +74,11 @@ class PlayScene extends AppScene {
   @override
   void update() {
     _player.update();
+    _sprites.clear(); //очищаем спрайты
+    _player.bullets.removeWhere((element) => !element.isVisible); //удаляем пули
+    for (var element in _player.bullets) {
+      element.update(); //двигаем
+      _sprites.add(element.build()); //добавляем пули с их новой позицией
+    }
   }
 }
