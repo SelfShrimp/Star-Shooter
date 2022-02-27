@@ -19,14 +19,16 @@ class _GameState extends State<Game>{
     () async {
       Isolate isolate = await Isolate.spawn(mainLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
+        _playScene.update();
+        setState(() {});
+
+        //не прерывается, поэтому в конце функции
         if (!running) {
           //убиваем изолят и слушатель
           isolate.kill(priority: Isolate.immediate);
           _receivePort.close();
           _playScene = PlayScene(); //очищаем поле
         }
-        _playScene.update();
-        setState(() {});
       });
     }();
     super.initState();

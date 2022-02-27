@@ -17,13 +17,14 @@ class PlayScene extends AppScene {
     () async {
       Isolate isolate = await Isolate.spawn(meteorLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
+        _meteors.add(Meteor());
+
         if (!running) {
           isolate.kill(priority: Isolate.immediate);
           _receivePort.close();
           _sprites.clear();
           _meteors.clear();
         }
-        _meteors.add(Meteor());
       });
     }();
   }
@@ -95,6 +96,14 @@ class PlayScene extends AppScene {
 
   @override
   void update() {
+    //game over
+    for (var element in _meteors) {
+      if ((_player.x <= element.x1 && _player.x1 >= element.x) &&
+          (_player.y <= element.y1 && _player.y1 >= element.y)){
+        stopLoop();
+        return;
+      }
+    }
     _player.update();
     _sprites.clear(); //очищаем спрайты
 
@@ -102,7 +111,7 @@ class PlayScene extends AppScene {
     for (var bullet in _player.bullets) {
       for (var meteor in _meteors) {
         if ((bullet.x <= meteor.x1 && bullet.x1 >= meteor.x) &&
-            (bullet.y <= meteor.y1)) {
+            (bullet.y <= meteor.y1 && bullet.y1 >= meteor.y)) {
           bullet.isVisible = false;
           meteor.isVisible = false;
         }

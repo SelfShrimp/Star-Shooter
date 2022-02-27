@@ -22,14 +22,17 @@ class Ship extends Sprite {
     () async {
       Isolate isolate = await Isolate.spawn(shotLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
+        //5w чтобы выстрелы летели перед кораблем, а не из его центра
+        bullets.add(Bullet(x+4.w, y-5.w)); //5половина корабля - 1половина пули
+        //двойной выстрел
+        //bullets.add(Bullet(x, y-5.w));
+        //bullets.add(Bullet(x+8.w, y-5.w)); //10ширина корабля - 2ширина пули
+
         if (!running) {
           isolate.kill(priority: Isolate.immediate);
           _receivePort.close();
           bullets.clear();
         }
-        //5w чтобы выстрелы летели перед кораблем, а не из его центра и сбоку
-        bullets.add(Bullet(x, y-5.w));
-        bullets.add(Bullet(x+8.w, y-5.w)); //10ширина корабля - 2ширина пули
       });
     }();
   }
