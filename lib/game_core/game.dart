@@ -12,13 +12,19 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game>{
   final ReceivePort _receivePort = ReceivePort(); //порт связи изолятов
-  final PlayScene _playScene = PlayScene();
+  PlayScene _playScene = PlayScene();
 
   @override
   void initState() {
     () async {
-      await Isolate.spawn(mainLoop, _receivePort.sendPort);
+      Isolate isolate = await Isolate.spawn(mainLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
+        if (!running) {
+          //убиваем изолят и слушатель
+          isolate.kill(priority: Isolate.immediate);
+          _receivePort.close();
+          _playScene = PlayScene(); //очищаем поле
+        }
         _playScene.update();
         setState(() {});
       });

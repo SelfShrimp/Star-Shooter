@@ -10,15 +10,20 @@ import 'package:starshooter/sprite/player_sprite.dart';
 class PlayScene extends AppScene {
   final Ship _player = Ship();
   final List<Widget> _sprites = [];
-  final List<Meteor> meteors = [];
+  final List<Meteor> _meteors = [];
 
   PlayScene(){
     final ReceivePort _receivePort = ReceivePort();
     () async {
-      await Isolate.spawn(meteorLoop, _receivePort.sendPort);
+      Isolate isolate = await Isolate.spawn(meteorLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
-        //5w чтобы выстрелы летели перед кораблем, а не из его центра
-        meteors.add(Meteor());
+        if (!running) {
+          isolate.kill(priority: Isolate.immediate);
+          _receivePort.close();
+          _sprites.clear();
+          _meteors.clear();
+        }
+        _meteors.add(Meteor());
       });
     }();
   }
@@ -92,13 +97,26 @@ class PlayScene extends AppScene {
   void update() {
     _player.update();
     _sprites.clear(); //очищаем спрайты
-    _player.bullets.removeWhere((element) => !element.isVisible); //удаляем пули
-    for (var element in _player.bullets) {
-      element.update(); //двигаем
-      _sprites.add(element.build()); //добавляем виджеты с их новой позицией
+
+    //проверка на пересечении выстрела и метеора
+    for (var bullet in _player.bullets) {
+      for (var meteor in _meteors) {
+        if ((bullet.x <= meteor.x1 && bullet.x1 >= meteor.x) &&
+            (bullet.y <= meteor.y1)) {
+          bullet.isVisible = false;
+          meteor.isVisible = false;
+        }
+      }
     }
-    meteors.removeWhere((element) => !element.isVisible);
-    for (var element in meteors) {
+
+    _player.bullets.removeWhere((element) => !element.isVisible); //удаляем пули
+    _meteors.removeWhere((element) => !element.isVisible);
+
+    for (var bullet in _player.bullets) {
+      bullet.update(); //двигаем
+      _sprites.add(bullet.build()); //добавляем виджеты с их новой позицией
+    }
+    for (var element in _meteors) {
       element.update();
       _sprites.add(element.build());
     }
