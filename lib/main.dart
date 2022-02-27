@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp>{
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/background.png"), fit: BoxFit.cover)),
+              image: AssetImage("assets/background.jpg"), fit: BoxFit.none)),
       child: Game(),
     );
   }
