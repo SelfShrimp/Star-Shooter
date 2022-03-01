@@ -3,11 +3,10 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:starshooter/game_core/main_loop.dart';
-import 'package:starshooter/scene/app_scene.dart';
 import 'package:starshooter/sprite/meteor_sprite.dart';
 import 'package:starshooter/sprite/player_sprite.dart';
 
-class PlayScene extends AppScene {
+class PlayScene{
   final Ship _player = Ship();
   final List<Widget> _sprites = [];
   final List<Meteor> _meteors = [];
@@ -29,9 +28,7 @@ class PlayScene extends AppScene {
     }();
   }
 
-  @override
   Widget buildScene() {
-
     return Stack(
       children: [
         _player.build(),
@@ -94,7 +91,6 @@ class PlayScene extends AppScene {
     );
   }
 
-  @override
   void update() {
     //game over
     for (var element in _meteors) {
