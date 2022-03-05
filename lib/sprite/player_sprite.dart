@@ -13,12 +13,12 @@ class Ship extends Sprite {
   bool isMoveRight = false;
   bool isNotPan = true;
   double _speedX = 0;
-  final double _size = 10.w;
+  final double size = 10.w;
   final List<Bullet> bullets = [];
 
   Ship(){
     x = 50.w; y = 80.h;
-    x1 = x + _size; y1 = y + _size;
+    x1 = x + size; y1 = y + size;
     () async {
       Isolate isolate = await Isolate.spawn(shotLoop, _receivePort.sendPort);
       _receivePort.listen((message) {
@@ -43,8 +43,8 @@ class Ship extends Sprite {
       left: x,
       top: y,
       child: Container(
-        height: _size,
-        width: _size,
+        height: size,
+        width: size,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
@@ -57,17 +57,17 @@ class Ship extends Sprite {
 
   @override
   void move() {
-    x1 = x + _size; y1 = y + _size;
+    x1 = x + size; y1 = y + size;
 
     if (isNotPan) return;
-    if (isMoveLeft) _speedX = -3;
-    if (isMoveRight) _speedX = 3;
+    if (isMoveLeft) _speedX = -5;
+    if (isMoveRight) _speedX = 5;
 
     x += _speedX;
     if (x < minWidth) {
       x = minWidth;
-    } else if (x>maxWidth-_size){
-      x = maxWidth-_size;
+    } else if (x > maxWidth - size){
+      x = maxWidth - size;
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:starshooter/game_core/main_loop.dart';
+import 'package:starshooter/sprite/app_sprite.dart';
 import 'package:starshooter/sprite/meteor_sprite.dart';
 import 'package:starshooter/sprite/player_sprite.dart';
 
@@ -92,10 +94,17 @@ class PlayScene{
   }
 
   void update() {
-    //game over
+    //пересечение метеора и игрока
     for (var element in _meteors) {
-      if ((_player.x <= element.x1 && _player.x1 >= element.x) &&
-          (_player.y <= element.y1 && _player.y1 >= element.y)){
+      //sqrt((x1-x0)^2 + (y1-y0)^2) //xy по формуле центры кругов
+      double d = sqrt(
+          pow((element.x+element.size/2)-(_player.x+_player.size/2),2) +
+              pow((element.y+element.size/2)-(_player.y+_player.size/2),2)
+      );
+      //d > r0 + r1 non intersect
+      //-10методом подбора, чтобы метеорит именно касался щита корабля
+      //TODO: узнать как на других размерах экрана
+      if (d <= element.size/2 + (_player.size-10)/2){
         stopLoop();
         return;
       }

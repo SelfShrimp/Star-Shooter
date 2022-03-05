@@ -24,7 +24,7 @@ class Defeat extends StatelessWidget{
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => const MyApp()));
               },
-              child: const Text('Retry?'))
+              child: const Text('Retry'))
         ],
       ),
     );
